@@ -4,13 +4,15 @@ import { Label } from '@/components/ui/label'
 import {Button} from "@/components/ui/button"
 import { useFormik } from 'formik'
 import * as Yup from "yup"
+import {useState } from "react"
+import {Loader2} from "lucide-react"
 
 export const Route = createFileRoute('/signup')({
   component: SignUp,
 })
 
 function SignUp() {
-
+const [isLoading, setItsLoading] = useState(false);
   const formik =  useFormik({
     initialValues:{
       firstName: "",
@@ -25,6 +27,7 @@ function SignUp() {
       password:Yup.string().required("Password is required")
     }),
     onSubmit:values=>{
+      setItsLoading(true);
       console.log(values)
     }
   })
@@ -88,14 +91,18 @@ function SignUp() {
                        <div className="text-red-500 text-sm font-satoshi-regular">{formik.errors.password}</div>
                      ) : null}
                    </div>
-                   <Button type='submit' className='bg-orange-600 hover:bg-orange-800 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>Create account</Button>
+                   <Button disabled={isLoading} type='submit' className='bg-orange-800 hover:bg-orange-600 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>{
+                    isLoading ? (
+                     <Loader2 className='animate-spin'/>
+                    ): "Create Account" 
+}</Button>
                </form>
      
      <div className='mt-4 w-4/5' >
      <p className='text-md font-satoshi-regular text-gray-700'>Already have  an account ?
        
              {" "}  
-             <Link  to="/signup">
+             <Link  to="/">
              <span className='text-orange-800 hover:text-orange-500 font-satoshi-medium hover:font-satoshi-bold hover:cursor-pointer'>Log in</span>
              </Link>       
                 </p>

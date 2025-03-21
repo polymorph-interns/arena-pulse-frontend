@@ -1,15 +1,20 @@
-import { createFileRoute,Navigate,Link } from '@tanstack/react-router'
+import { createFileRoute,Link } from '@tanstack/react-router'
 import { useFormik } from 'formik'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import {Button} from '@/components/ui/button'
 import * as Yup from "yup"
+import { useState } from 'react'
+import {Loader2} from "lucide-react"
 
 export const Route = createFileRoute('/login')({
   component: Login,
 })
 
 function Login() {
+
+  const [isLoading, setItsLoading] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -21,6 +26,7 @@ function Login() {
     }),
     onSubmit:values =>
       {
+        setItsLoading(true);
         console.log("For Submitted", values)
       },
   })
@@ -56,8 +62,11 @@ function Login() {
                   <div className="text-red-500 text-sm font-satoshi-regular">{formik.errors.password}</div>
                 ) : null}
               </div>
-              <Button type='submit' className='bg-orange-600 hover:bg-orange-800 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>Log In</Button>
-          </form>
+  <Button disabled={isLoading} type='submit' className='bg-orange-800 hover:bg-orange-600 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>{
+                    isLoading ? (
+                     <Loader2 className='animate-spin'/>
+                    ): "Log in" 
+}</Button>          </form>
 
 <div className='mt-4 flex flex-col justify-start items-start gap-2 w-4/5' >
 <p className='text-md font-satoshi-regular text-gray-500  hover:text-gray-900 hover:cursor-pointer hover:font-satoshi-medium'>Forgot password ?
