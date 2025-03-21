@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute,Navigate,Link } from '@tanstack/react-router'
 import { useFormik } from 'formik'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -28,17 +28,14 @@ function Login() {
     <main className="flex justify-center items-center h-screen">
       <div className='bg-white p-10 w-1/2 flex flex-col justify-center items-start'>
         <h1 className="font-clash-bold text-3xl">Welcome Back, Baller 🏀</h1>
-          <p className='font-satoshi-regular text-md text-gray-700 w-4/5'>Log in to stay in the game. Never miss a dunk, a three-pointer or a buzzer-beater.</p>
+          <p className='font-satoshi-regular text-md text-gray-700 w-4/5'>Log in to catch every dunk, three-pointer, and buzzer-beater!</p>
           <form className='flex flex-col justify-center item-start w-4/5 mt-5 gap-4' onSubmit={formik.handleSubmit}>
               <div className='space-y-2'>
                 <Label htmlFor='email' className='text-md font-satoshi-regular text-gray-900'>Email</Label>
                 <Input
                 id="email"
-                name="email"
                 type='email'
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
+                {...formik.getFieldProps('email')}
                 placeholder="engineering@polymorphlabs.io"
                 className="font-satoshi-regular text-lg text-gray-700 py-5"
                />
@@ -50,11 +47,8 @@ function Login() {
                 <Label htmlFor='email' className='text-md font-satoshi-regular text-gray-900'>Password</Label>
                 <Input
                 id="password"
-                name="password"
                 type='password'
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.password}
+                {...formik.getFieldProps('password')}
                 placeholder="****************"
                 className="font-satoshi-regular text-lg text-gray-700 py-5 "
                />
@@ -69,7 +63,11 @@ function Login() {
 <p className='text-md font-satoshi-regular text-gray-500  hover:text-gray-900 hover:cursor-pointer hover:font-satoshi-medium'>Forgot password ?
            </p>
 <p className='text-md font-satoshi-regular text-gray-700'>Don't have an account ?
-        {" "}          <span className='text-blue-800 hover:text-blue-500 font-satoshi-medium hover:font-satoshi-bold hover:cursor-pointer'>Create an account</span>
+  
+        {" "}  
+        <Link  to="/signup">
+        <span className='text-blue-800 hover:text-blue-500 font-satoshi-medium hover:font-satoshi-bold hover:cursor-pointer'>Create an account</span>
+        </Link>       
            </p>
 
 </div>
