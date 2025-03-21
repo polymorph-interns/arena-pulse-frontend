@@ -56,7 +56,7 @@ function Login() {
                   <div className="text-red-500 text-sm font-satoshi-regular">{formik.errors.password}</div>
                 ) : null}
               </div>
-              <Button type='submit' className='bg-blue-600 hover:bg-blue-800 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>Log In</Button>
+              <Button type='submit' className='bg-orange-600 hover:bg-orange-800 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>Log In</Button>
           </form>
 
 <div className='mt-4 flex flex-col justify-start items-start gap-2 w-4/5' >
@@ -66,7 +66,7 @@ function Login() {
   
         {" "}  
         <Link  to="/signup">
-        <span className='text-blue-800 hover:text-blue-500 font-satoshi-medium hover:font-satoshi-bold hover:cursor-pointer'>Create an account</span>
+        <span className='text-orange-800 hover:text-orange-500 font-satoshi-medium hover:font-satoshi-bold hover:cursor-pointer'>Create an account</span>
         </Link>       
            </p>
 
