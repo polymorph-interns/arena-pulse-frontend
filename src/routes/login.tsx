@@ -1,16 +1,91 @@
 import { createFileRoute } from '@tanstack/react-router'
-
-
-
+import { useFormik } from 'formik'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import {Button} from '@/components/ui/button'
+import * as Yup from "yup"
 
 export const Route = createFileRoute('/login')({
   component: Login,
 })
 
 function Login() {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema:Yup.object({
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+      password:Yup.string().required("Password is required")
+    }),
+    onSubmit:values =>
+      {
+        console.log("For Submitted", values)
+      },
+  })
   return (
-    <main>
-      
+    <main className="flex justify-center items-center h-screen">
+      <div className='bg-white p-10 w-1/2 flex flex-col justify-center items-start'>
+        <h1 className="font-clash-bold text-3xl">Welcome Back, Baller 🏀</h1>
+          <p className='font-satoshi-regular text-md text-gray-700 w-4/5'>Log in to stay in the game. Never miss a dunk, a three-pointer or a buzzer-beater.</p>
+          <form className='flex flex-col justify-center item-start w-4/5 mt-5 gap-4' onSubmit={formik.handleSubmit}>
+              <div className='space-y-2'>
+                <Label htmlFor='email' className='text-md font-satoshi-regular text-gray-900'>Email</Label>
+                <Input
+                id="email"
+                name="email"
+                type='email'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                placeholder="engineering@polymorphlabs.io"
+                className="font-satoshi-regular text-lg text-gray-700 py-5"
+               />
+               {formik.touched.email && formik.errors.email ? (
+                  <div className="text-red-500 text-sm font-satoshi-regular">{formik.errors.email}</div>
+                ) : null}
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor='email' className='text-md font-satoshi-regular text-gray-900'>Password</Label>
+                <Input
+                id="password"
+                name="password"
+                type='password'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+                placeholder="****************"
+                className="font-satoshi-regular text-lg text-gray-700 py-5 "
+               />
+                {formik.touched.password && formik.errors.password ? (
+                  <div className="text-red-500 text-sm font-satoshi-regular">{formik.errors.password}</div>
+                ) : null}
+              </div>
+              <Button type='submit' className='bg-blue-600 hover:bg-blue-800 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>Log In</Button>
+          </form>
+
+<div className='mt-4 flex flex-col justify-start items-start gap-2 w-4/5' >
+<p className='text-md font-satoshi-regular text-gray-500  hover:text-gray-900 hover:cursor-pointer hover:font-satoshi-medium'>Forgot password ?
+           </p>
+<p className='text-md font-satoshi-regular text-gray-700'>Don't have an account ?
+        {" "}          <span className='text-blue-800 hover:text-blue-500 font-satoshi-medium hover:font-satoshi-bold hover:cursor-pointer'>Create an account</span>
+           </p>
+
+</div>
+      </div>
+      <div className="w-1/2 h-screen overflow-hidden">
+    <video
+      autoPlay
+      muted
+      loop
+      className="w-full h-full object-cover"
+      style={{ objectFit: 'cover' }}
+    >
+      <source src="/cinema.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
     </main>
   )
 }
