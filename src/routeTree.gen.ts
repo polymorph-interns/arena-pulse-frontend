@@ -8,15 +8,32 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
 import { Route as LoginImport } from './routes/login'
-import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as DashboardTeamsImport } from './routes/dashboard/teams'
+import { Route as DashboardOverviewImport } from './routes/dashboard/overview'
+import { Route as DashboardLeaguesImport } from './routes/dashboard/leagues'
+import { Route as DashboardFixturesImport } from './routes/dashboard/fixtures'
+import { Route as DashboardLayoutImport } from './routes/dashboard/_layout'
+
+// Create Virtual Routes
+
+const DashboardImport = createFileRoute('/dashboard')()
 
 // Create/Update Routes
+
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SignupRoute = SignupImport.update({
   id: '/signup',
@@ -30,16 +47,45 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardTeamsRoute = DashboardTeamsImport.update({
+  id: '/teams',
+  path: '/teams',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardOverviewRoute = DashboardOverviewImport.update({
+  id: '/overview',
+  path: '/overview',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardLeaguesRoute = DashboardLeaguesImport.update({
+  id: '/leagues',
+  path: '/leagues',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardFixturesRoute = DashboardFixturesImport.update({
+  id: '/fixtures',
+  path: '/fixtures',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const DashboardLayoutRoute = DashboardLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -51,13 +97,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -74,54 +113,168 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/_layout': {
+      id: '/dashboard/_layout'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardLayoutImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/fixtures': {
+      id: '/dashboard/fixtures'
+      path: '/fixtures'
+      fullPath: '/dashboard/fixtures'
+      preLoaderRoute: typeof DashboardFixturesImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/leagues': {
+      id: '/dashboard/leagues'
+      path: '/leagues'
+      fullPath: '/dashboard/leagues'
+      preLoaderRoute: typeof DashboardLeaguesImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/overview': {
+      id: '/dashboard/overview'
+      path: '/overview'
+      fullPath: '/dashboard/overview'
+      preLoaderRoute: typeof DashboardOverviewImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/teams': {
+      id: '/dashboard/teams'
+      path: '/teams'
+      fullPath: '/dashboard/teams'
+      preLoaderRoute: typeof DashboardTeamsImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface DashboardRouteChildren {
+  DashboardLayoutRoute: typeof DashboardLayoutRoute
+  DashboardFixturesRoute: typeof DashboardFixturesRoute
+  DashboardLeaguesRoute: typeof DashboardLeaguesRoute
+  DashboardOverviewRoute: typeof DashboardOverviewRoute
+  DashboardTeamsRoute: typeof DashboardTeamsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLayoutRoute: DashboardLayoutRoute,
+  DashboardFixturesRoute: DashboardFixturesRoute,
+  DashboardLeaguesRoute: DashboardLeaguesRoute,
+  DashboardOverviewRoute: DashboardOverviewRoute,
+  DashboardTeamsRoute: DashboardTeamsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard': typeof DashboardLayoutRoute
+  '/dashboard/fixtures': typeof DashboardFixturesRoute
+  '/dashboard/leagues': typeof DashboardLeaguesRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/teams': typeof DashboardTeamsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/fixtures': typeof DashboardFixturesRoute
+  '/dashboard/leagues': typeof DashboardLeaguesRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/teams': typeof DashboardTeamsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/_layout': typeof DashboardLayoutRoute
+  '/dashboard/fixtures': typeof DashboardFixturesRoute
+  '/dashboard/leagues': typeof DashboardLeaguesRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/teams': typeof DashboardTeamsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/dashboard'
+    | '/dashboard/fixtures'
+    | '/dashboard/leagues'
+    | '/dashboard/overview'
+    | '/dashboard/teams'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/signup'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/dashboard'
+    | '/dashboard/fixtures'
+    | '/dashboard/leagues'
+    | '/dashboard/overview'
+    | '/dashboard/teams'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/dashboard'
+    | '/dashboard/_layout'
+    | '/dashboard/fixtures'
+    | '/dashboard/leagues'
+    | '/dashboard/overview'
+    | '/dashboard/teams'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -135,22 +288,54 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
         "/login",
-        "/signup"
+        "/signup",
+        "/dashboard"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/dashboard": {
-      "filePath": "dashboard.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/dashboard": {
+      "filePath": "dashboard",
+      "children": [
+        "/dashboard/_layout",
+        "/dashboard/fixtures",
+        "/dashboard/leagues",
+        "/dashboard/overview",
+        "/dashboard/teams",
+        "/dashboard/"
+      ]
+    },
+    "/dashboard/_layout": {
+      "filePath": "dashboard/_layout.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/fixtures": {
+      "filePath": "dashboard/fixtures.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/leagues": {
+      "filePath": "dashboard/leagues.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/overview": {
+      "filePath": "dashboard/overview.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/teams": {
+      "filePath": "dashboard/teams.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }
