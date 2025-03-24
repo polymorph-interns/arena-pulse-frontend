@@ -10,7 +10,7 @@ function Dashboard() {
     <>
     <div className='flex justify-center items-center'>
  {/* Sidebar */}
- 
+ Test
     <div className="h-screen w-1/5 bg-white">
 
     </div>
