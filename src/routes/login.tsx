@@ -6,6 +6,7 @@ import {Button} from '@/components/ui/button'
 import * as Yup from "yup"
 import { useState } from 'react'
 import {Loader2} from "lucide-react"
+import axios from "axios"
 
 export const Route = createFileRoute('/login')({
   component: Login,
@@ -13,7 +14,7 @@ export const Route = createFileRoute('/login')({
 
 function Login() {
 
-  const [isLoading, setItsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -24,12 +25,17 @@ function Login() {
       email: Yup.string().email("Invalid email address").required("Email is required"),
       password:Yup.string().required("Password is required")
     }),
-    onSubmit:values =>
-      {
-        setItsLoading(true);
-        console.log("For Submitted", values)
-      },
-  })
+    onSubmit: values => {
+      axios.post("http://localhost:4000/v1/auth/login", values)
+        .then((response: any) => {
+          setIsLoading(true);
+          return response.data;
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+  });
   return (
     <main className="flex justify-center items-center h-screen">
       <div className='bg-white p-10 w-1/2 flex flex-col justify-center items-start'>

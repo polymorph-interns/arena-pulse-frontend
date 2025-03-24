@@ -6,13 +6,14 @@ import { useFormik } from 'formik'
 import * as Yup from "yup"
 import {useState } from "react"
 import {Loader2} from "lucide-react"
+import axios from "axios"
 
 export const Route = createFileRoute('/signup')({
   component: SignUp,
 })
 
 function SignUp() {
-const [isLoading, setItsLoading] = useState(false);
+const [isLoading, setIsLoading] = useState(false);
   const formik =  useFormik({
     initialValues:{
       firstName: "",
@@ -27,8 +28,17 @@ const [isLoading, setItsLoading] = useState(false);
       password:Yup.string().required("Password is required")
     }),
     onSubmit:values=>{
-      setItsLoading(true);
-      console.log(values)
+     axios.post("http://localhost:4000/v1/auth/create-account",values)
+     .then(response=>
+     {
+      setIsLoading(true);
+      return response.data
+     }
+     )
+     .finally(()=>
+    {
+      setIsLoading(false);
+    })
     }
   })
   return(
@@ -92,9 +102,9 @@ const [isLoading, setItsLoading] = useState(false);
                      ) : null}
                    </div>
                    <Button disabled={isLoading} type='submit' className='bg-orange-800 hover:bg-orange-600 hover:cursor-pointer text-white font-satoshi-regular text-sm py-5 px-24 rounded-md'>{
-                    isLoading ? (
-                     <Loader2 className='animate-spin'/>
-                    ): "Create Account" 
+                    !isLoading ?"Create Account" :  (
+                      <Loader2 className='animate-spin'/>
+                     )
 }</Button>
                </form>
      
