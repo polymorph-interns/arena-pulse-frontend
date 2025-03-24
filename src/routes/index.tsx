@@ -1,9 +1,11 @@
 import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { useAuth } from '@/context/authContext'
 
 export const Route = createFileRoute('/')({
   component: Index,
 })
 
 function Index() {
-  return <Navigate to="/login" />
+  const { isAuthenticated } = useAuth();
+ return isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
 }

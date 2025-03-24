@@ -1,4 +1,4 @@
-import { createFileRoute,Link } from '@tanstack/react-router'
+import { createFileRoute,Link, Navigate } from '@tanstack/react-router'
 import { useFormik } from 'formik'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -7,6 +7,8 @@ import * as Yup from "yup"
 import { useState } from 'react'
 import {Loader2} from "lucide-react"
 import axios from "axios"
+import { useAuth } from '@/context/authContext'
+import { useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/login')({
   component: Login,
@@ -15,7 +17,8 @@ export const Route = createFileRoute('/login')({
 function Login() {
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const {login, isAuthenticated} = useAuth( );
+   const navigate = useNavigate() ;
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -25,17 +28,26 @@ function Login() {
       email: Yup.string().email("Invalid email address").required("Email is required"),
       password:Yup.string().required("Password is required")
     }),
-    onSubmit: values => {
-      axios.post("http://localhost:4000/v1/auth/login", values)
-        .then((response: any) => {
-          setIsLoading(true);
-          return response.data;
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    onSubmit: async(values)=> {
+      setIsLoading(true);
+     try {
+      const response = await axios.post("http://localhost:4000/v1/auth/login",values)
+      const {token, user } = response.data;
+      login(token, user);
+    navigate({to:"/dashboard"})
+     } catch (error) {
+      console.error("Login failed:", error);
+     }
+     finally
+     {
+      setIsLoading(false);
+     }
     },
   });
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <main className="flex justify-center items-center h-screen">
       <div className='bg-white p-10 w-1/2 flex flex-col justify-center items-start'>

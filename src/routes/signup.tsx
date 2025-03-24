@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link , useNavigate} from '@tanstack/react-router'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {Button} from "@/components/ui/button"
@@ -7,6 +7,7 @@ import * as Yup from "yup"
 import {useState } from "react"
 import {Loader2} from "lucide-react"
 import axios from "axios"
+import { useAuth } from '@/context/authContext'
 
 export const Route = createFileRoute('/signup')({
   component: SignUp,
@@ -14,6 +15,8 @@ export const Route = createFileRoute('/signup')({
 
 function SignUp() {
 const [isLoading, setIsLoading] = useState(false);
+const {login} = useAuth();
+const navigate = useNavigate();
   const formik =  useFormik({
     initialValues:{
       firstName: "",
@@ -27,18 +30,18 @@ const [isLoading, setIsLoading] = useState(false);
       email: Yup.string().email("Invalid email address").required("Email is required"),
       password:Yup.string().required("Password is required")
     }),
-    onSubmit:values=>{
-     axios.post("http://localhost:4000/v1/auth/create-account",values)
-     .then(response=>
-     {
+    onSubmit: async (values) => {
       setIsLoading(true);
-      return response.data
-     }
-     )
-     .finally(()=>
-    {
-      setIsLoading(false);
-    })
+      try {
+        const response = await axios.post("http://localhost:4000/v1/auth/create-account", values);
+        const { token, user } = response.data;
+        login(user, token);
+        navigate({ to: '/dashboard' });
+      } catch (error) {
+        console.error("Signup failed:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   })
   return(
