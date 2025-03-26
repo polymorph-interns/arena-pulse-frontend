@@ -3,6 +3,7 @@ import LayoutComponent from './_layout'
 import {useQuery} from "@tanstack/react-query"
 import { fetchAllTeams } from '@/api/teamsRequest'
 import { Button } from '@/components/ui/button'
+import {Loader2 } from "lucide-react"
 
 export const Route = createFileRoute('/dashboard/teams')({
   component: RouteComponent,
@@ -22,15 +23,19 @@ function RouteComponent() {
           </h1>
          {
           isPending? (
-            <p>
-              Loading ....
-            </p>
+            <div className="h-screen flex justify-center items-center ">
+            <span className="flex justify-center items-center">
+               <Loader2
+               size={50}
+                className='animate-spin text-orange-500 '/>
+            </span>
+            </div>
           ): isError ? (
-            <p>
+            <p className='flex justify-center items-center'>
             Error loading data
           </p>
           ):  (
-          <div className='w-full grid grid-cols-4 place-items-center gap-5 overflow-visible'>
+          <div className='w-full grid grid-cols-1 md:grid-cols-3 place-items-even gap-5 overflow-visible'>
                       {data?.map((team: any) => (
                         <div key={team.id} className="flex justify-between items-center p-4 w-84 h-48 border border-gray-200 rounded-md shadow-md mb-4">
                           <div className='w-4/5 flex flex-col justify-center items-start gap-2'>
