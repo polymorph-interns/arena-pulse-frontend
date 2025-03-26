@@ -35,8 +35,8 @@ export const AppSidebar= ()=>
               <SidebarMenu className='space-y-2 p-2'>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild className='font-clash-medium text-base text-gray-700 py-3 hover:bg-orange-300 hover:text-white rounded-md transition-colors'>
-                      <Link to={item.url} activeProps={{ className: 'bg-orange-300 text-white' }} className="flex items-center gap-3 px-3">
+                    <SidebarMenuButton asChild className='font-clash-medium text-base text-gray-700 py-5 hover:bg-orange-300 hover:text-white rounded-md transition-colors'>
+                      <Link to={item.url} activeProps={{ className: 'font-clash-semibold bg-orange-300 text-black border-3 border-black' }} className="flex items-center gap-3 px-3">
                         <item.icon size={20} />
                         <span>{item.title}</span>
                       </Link>

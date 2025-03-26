@@ -12,8 +12,12 @@ function Dashboard() {
   return (
     <LayoutComponent>
       <div className="h-full">
-        <h1 className="text-2xl font-bold mb-4">Dashboard Overview</h1>
-        <p>Welcome to ArenaPulse dashboard.</p>
+        <div className='flex flex-col justify-center items-center gap-5'>
+        {/* Top Fixtures Display */}
+        <div>
+          
+        </div>
+          </div>
       </div>
     </LayoutComponent>
   )
