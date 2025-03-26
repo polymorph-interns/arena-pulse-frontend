@@ -13,10 +13,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex justify-center items-center h-auto w-full overflow-auto">
       <AppSidebar />
-      <div className="flex-1 flex flex-col">
-        <header className="bg-orange-300 text-black rounded-md  ml-4  mt-4 h-16 flex items-center px-4">
+      <div className="flex flex-col  justify-center items-start flex-1  "> 
+        <header className="border-b  border-b-gray-300 text-black  mt-4 h-16 w-full flex items-center px-4">
           <SidebarTrigger className="md:hidden" />
           <div className="ml-4 font-medium w-full">
             <p className='text-lg text-black font-clash-semibold'>
@@ -24,7 +24,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </p>
           </div>
         </header>
-        <main className="flex-1 overflow-auto p-4">
+        <main className="w-full overflow-auto p-4">
           {children}
         </main>
       </div>

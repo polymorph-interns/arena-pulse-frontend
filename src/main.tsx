@@ -4,6 +4,7 @@ import { RouterProvider,createRouter } from '@tanstack/react-router'
 import './index.css'
 import { routeTree } from './routeTree.gen.ts'
 import { AuthProvider } from './context/authContext.tsx'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 const router = createRouter({routeTree})
 
@@ -13,11 +14,14 @@ declare module '@tanstack/react-router'{
   }
 }
 
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-    <RouterProvider router={router}/>
+    <QueryClientProvider client={queryClient}>
+    <AuthProvider> 
+      <RouterProvider router={router}/>
     </AuthProvider>
-  
+    </QueryClientProvider>
   </StrictMode>,
 )
