@@ -46,10 +46,10 @@ const navigate = useNavigate();
   })
   return(
     <main className='flex justify-center items-center h-screen'>
-     <div className='bg-white p-10 w-1/2 flex flex-col justify-center items-start'>
+     <div className='bg-white p-10 w-full md:w-1/2 flex flex-col justify-center items-start'>
              <h1 className="font-clash-bold text-3xl">Join the Squad! 🏀</h1>
                <p className='font-satoshi-regular text-md text-gray-700 w-4/5'>Get live updates, stats, and highlights - never miss a play</p>
-               <form className='flex flex-col justify-center item-start w-4/5 mt-5 gap-4' onSubmit={formik.handleSubmit}>
+               <form className='flex flex-col justify-center item-start w-full md:w-4/5 mt-5 gap-4' onSubmit={formik.handleSubmit}>
                <div className='w-full flex jusitfy-center items-center gap-6'>
                <div className='space-y-2 w-2/3'>
                      <Label htmlFor='firstName' className='text-md font-satoshi-regular text-gray-900'>First Name</Label>
@@ -122,7 +122,7 @@ const navigate = useNavigate();
      
      </div>
            </div>
-           <div className="w-1/2 h-screen overflow-hidden">
+           <div className="hidden md:block md:w-1/2 h-screen overflow-hidden">
          <video
            autoPlay
            muted

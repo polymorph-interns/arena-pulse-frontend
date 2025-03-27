@@ -50,10 +50,10 @@ function Login() {
   }
   return (
     <main className="flex justify-center items-center h-screen">
-      <div className='bg-white p-10 w-1/2 flex flex-col justify-center items-start'>
+      <div className='bg-white p-10 w-full md:w-1/2 flex flex-col justify-center items-start'>
         <h1 className="font-clash-bold text-3xl">Welcome Back, Baller 🏀</h1>
           <p className='font-satoshi-regular text-md text-gray-700 w-4/5'>Log in to catch every dunk, three-pointer, and buzzer-beater!</p>
-          <form className='flex flex-col justify-center item-start w-4/5 mt-5 gap-4' onSubmit={formik.handleSubmit}>
+          <form className='flex flex-col justify-center item-start w-full md:w-4/5 mt-5 gap-4' onSubmit={formik.handleSubmit}>
               <div className='space-y-2'>
                 <Label htmlFor='email' className='text-md font-satoshi-regular text-gray-900'>Email</Label>
                 <Input
@@ -99,7 +99,7 @@ function Login() {
 
 </div>
       </div>
-      <div className="w-1/2 h-screen overflow-hidden">
+      <div className="hidden md:block w-1/2 h-screen overflow-hidden">
     <video
       autoPlay
       muted
