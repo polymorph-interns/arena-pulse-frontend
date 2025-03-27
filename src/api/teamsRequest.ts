@@ -1,4 +1,4 @@
-export const BASE_API_URL = "http://localhost:4000/v1/teams"
+export const BASE_API_URL = "https://arena-pulse-backend.onrender.com/teams"
 
 export const fetchAllTeams= async()=>
 {
