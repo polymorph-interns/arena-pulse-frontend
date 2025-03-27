@@ -1,4 +1,4 @@
-const BASE_API_URL = "http://localhost:4000/v1/teams"
+export const BASE_API_URL = "http://localhost:4000/v1/teams"
 
 export const fetchAllTeams= async()=>
 {
