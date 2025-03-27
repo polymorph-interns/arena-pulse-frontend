@@ -15,7 +15,7 @@ function Dashboard() {
         <div className='flex flex-col justify-center items-center gap-5'>
         {/* Top Fixtures Display */}
         <div>
-          
+          <p>Still in development</p>
         </div>
           </div>
       </div>

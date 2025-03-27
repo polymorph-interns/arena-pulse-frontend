@@ -5,5 +5,5 @@ export const Route = createFileRoute('/dashboard/')({
 })
 
 function RouteComponent() {
-  return <Navigate to="/dashboard/overview" />
+  return <Navigate to="/dashboard/teams" />
 }
