@@ -33,7 +33,7 @@ const navigate = useNavigate();
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        const response = await axios.post("http://localhost:4000/v1/auth/create-account", values);
+        const response = await axios.post("https://arena-pulse-backend.onrender.com/v1/auth/create-account", values);
         const { token, user } = response.data;
         login(user, token);
         navigate({ to: '/dashboard' });

@@ -31,7 +31,7 @@ function Login() {
     onSubmit: async(values)=> {
       setIsLoading(true);
      try {
-      const response = await axios.post("http://localhost:4000/v1/auth/login",values)
+      const response = await axios.post("https://arena-pulse-backend.onrender.com/v1/auth/login",values)
       const {token, user } = response.data;
       login(token, user);
     navigate({to:"/dashboard"})
