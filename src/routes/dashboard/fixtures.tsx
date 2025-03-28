@@ -4,6 +4,9 @@ import { useState } from "react"
 import LayoutComponent from './_layout'
 import { fetchAllTeams } from '@/api/teamsRequest'
 import { fetchGames } from '@/api/gamesRequest'
+import { MapPin, Clock8 ,CalendarDays,ChevronUp,ChevronDown} from 'lucide-react'
+import { Carousel, CarouselContent, CarouselItem,CarouselNext,
+  CarouselPrevious } from '@/components/ui/carousel'
 
 export const Route = createFileRoute('/dashboard/fixtures')({
   component: Fixtures,
@@ -19,28 +22,31 @@ function Fixtures() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | string>(132);
 
   // Fetch the games data for the selected team
-  const { data: gameInfo, isPending, isError } = useQuery({
-    queryKey: ["games", selectedTeamId],
-    queryFn: () => fetchGames(selectedTeamId),
-    // Only run the query when a team is selected
-    enabled: selectedTeamId !== 0
-  });
+const { data: gameInfo, isPending, isError } = useQuery({
+  queryKey: ["games", selectedTeamId],
+  queryFn: () => fetchGames(selectedTeamId),
+  // Only run the query when a team is selected
+  enabled: selectedTeamId !== 0
+});
 
+const [showMatchDetails, setShowMatchDetails] = useState(false);
+const [getGameId, setGameId] = useState<number>()
   return (
     <LayoutComponent>
       <div className="h-full w-full overflow-auto p-4">
         <h1 className="font-clash-bold text-2xl font-bold mb-4 uppercase">
           Fixtures <span className='text-orange-300'>&gt;</span> National Basketball Association
         </h1>
-
-        <div className="grid grid-col-4 gap-4 overflow-x-auto">
+<div className='min-h-screen flex flex-col gap-28'>
+        <Carousel className="relative flex w-full overflow-hidden  gap-4 snap-x px-10">
+          <CarouselContent className='pl-5 space-x-5'>
           {teamData?.map((team: any) => (
-            <div
+            <CarouselItem
               key={team.id}
               className={`
                 flex-shrink-0 flex justify-center items-center gap-2 
                 border-2 border-black rounded-full px-4 py-1 
-                hover:bg-orange-300 hover:cursor-pointer
+                hover:bg-orange-300 hover:cursor-pointer basis-1/7
                 ${selectedTeamId === team.id ? 'bg-orange-300' : ''}
               `}
               onClick={() => setSelectedTeamId(team.id)}
@@ -51,22 +57,92 @@ function Fixtures() {
                 className="w-6 h-6 object-contain"
               />
               <p className="text-sm font-clash-medium">{team.name}</p>
-            </div>
+            </CarouselItem>
           ))}
-        </div>
+          </CarouselContent>
+          <CarouselPrevious className='absolute top-6 left-0 bg-orange-300 hover:cursor-pointer' />
+        <CarouselNext className='absolute top-6 right-0 bg-orange-300 hover:cursor-pointer' />
+        </Carousel>
+       
 
         {/* Loading and error states */}
         {isPending && <p>Loading games...</p>}
         {isError && <p>Error loading games</p>}
 
         {/* Games display */}
-        <div className="mt-4">
+        <div className="grid grid-cols-1  gap-6 ">
           {gameInfo?.map((game: any) => (
-            <div key={game.id} className="border p-2 mb-2">
-              <p>Game ID: {game.id}</p>
+            <div key={game.id} className="flex flex-col border border-orange-200 rounded-lg p-3 mb-2 gap-5 hover:bg-orange-100">
+             <div className="flex justify-between item-start">
+              <div className='flex justify-center items-center gap-2'>
+              <span className="bg-gray-200 px-3 py-1  rounded-full flex justify-center items-center gap-2 text-xs font-satoshi-medium">
+                  <CalendarDays size={16} />
+                  {game.date.split('T')[0]}
+                  </span>  
+             <span className="bg-gray-200 px-3 py-1  rounded-full flex justify-center items-center gap-2 text-xs font-satoshi-medium">
+                  <Clock8 size={16} />
+                  {game.time} EST
+                  </span>
+             
+                  </div>
+                <span className=" flex justify-center items-center bg-orange-300/50 text-xs px-3 py-[6px] rounded-full gap-1 font-satoshi-bold text-orange-700">
+                  <MapPin size={16} />
+                  {game.venue}
+                </span>
+                
+              </div>
+              <div className='flex flex-col justify-center items-center gap-2'>
+               
+                </div>
+                <div className='grid grid-cols-3 place-items-center'>
+                  <div className='flex flex-col justify-center items-center gap-2'>
+                  <img src={game.teams.home.logo} alt={game.teams.home.name} className='w-18 h-18'/>
+                  <span className="font-clash-semibold text-sm">
+                    {game.teams.home.name}
+                  </span>
+                  </div>
+
+                  <div className="flex flex-col justify-center items-center gap-3">
+                    <span className="font-clash-semibold text-3xl">
+                      {game.scores.home.total} - {game.scores.away.total}
+                      </span>
+                      <span className="font-clash-medium text-xs text-gray-600">
+                        {game.status.long}
+                      </span>
+                    </div>
+
+                    <div className='flex flex-col justify-center items-center gap-2'>
+                  <img src={game.teams.away.logo} alt={game.teams.away.name} className='w-18 h-18'/>
+                  <span className="font-clash-semibold text-sm">
+                    {game.teams.away.name}
+                  </span>
+                  </div>
+                  </div>
+
+                  <div className=" flex justify-center items-center ">
+                    <span className=' flex justify-center items-center gap-3 font-clash-semibold text-sm text-gray-500 border-2 border-gray-500  px-4 py-2 rounded-md hover:cursor-pointer ' onClick={()=>setShowMatchDetails(!showMatchDetails)}>
+                      {showMatchDetails ? "Hide" : "Show"} {" "}
+                       Score Details
+                       {showMatchDetails ? (
+                        <ChevronUp/>
+                       ): (
+                        <ChevronDown/>
+                       )}
+                      </span>
+                  </div>
               {/* Add more game details as needed */}
+              {showMatchDetails && (
+             <div className='flex flex-col justify-center items-center gap-2 border-b'>
+              <div className=" ">
+
+              </div>
+              </div>
+            )}
             </div>
+
+          
           ))}
+        </div>
         </div>
       </div>
     </LayoutComponent>

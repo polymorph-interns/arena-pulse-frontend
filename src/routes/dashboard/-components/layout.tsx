@@ -15,7 +15,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex justify-center items-center h-auto w-full overflow-auto">
       <AppSidebar />
-      <div className="flex flex-col  justify-center items-start flex-1  "> 
+      <div className="flex flex-col  justify-center items-start flex-1  min-w-0"> 
         <header className="border-b  border-b-gray-300 text-black  mt-4 h-16 w-full flex items-center px-4">
           <SidebarTrigger className="md:hidden" />
           <div className="ml-4 font-medium w-full">
