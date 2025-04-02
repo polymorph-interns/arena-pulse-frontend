@@ -18,6 +18,11 @@ export const fetchTeamById= async(id:number)=>
 
 export const fetchTeamStatsById =async(id:number)=>
 {
-  const teamStats = await fetch(`${BASE_API_URL}/${id}/stats`)
-  return teamStats.json();
+  let teamStats = await fetch(`${BASE_API_URL}/${id}/stats`);
+  if (!teamStats.ok) {
+    throw new Error(`Failed to fetch team stats: ${teamStats.statusText}`);
+  }
+  const teamStatsData = await teamStats.json();
+  console.log(teamStatsData)
+  return teamStatsData;
 }

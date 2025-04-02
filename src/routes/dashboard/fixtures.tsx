@@ -53,7 +53,7 @@ function getInitialsCode(teamName:string) {
               className={`
                 flex-shrink-0 flex justify-center items-center gap-2 
                 border-2 border-black rounded-full px-4 py-1 
-                hover:bg-orange-300 hover:cursor-pointer basis-1/7
+                hover:bg-orange-300 hover:cursor-pointer md:basis-1/4
                 ${selectedTeamId === team.id ? 'bg-orange-300' : ''}
               `}
               onClick={() => setSelectedTeamId(team.id)}
@@ -130,7 +130,7 @@ function getInitialsCode(teamName:string) {
                     <span className=' flex justify-center items-center gap-3 font-clash-semibold text-sm text-gray-500 border-2 border-gray-500  px-4 py-2 rounded-md hover:cursor-pointer ' onClick={()=>setShowMatchDetails(!showMatchDetails)}>
                       {showMatchDetails && gameId === game.id ? "Hide" : "Show"} {" "}
                        Score Details
-                       {showMatchDetails ? (
+                       {showMatchDetails && gameId === game.id ? (
                         <ChevronUp/>
                        ): (
                         <ChevronDown/>
