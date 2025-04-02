@@ -4,11 +4,11 @@ import { Link } from '@tanstack/react-router';
 
 export const AppSidebar = () => {
   const items = [
-    {
-      title: "Overview",
-      url: "/dashboard/overview",
-      icon: Home,
-    },
+    // {
+    //   title: "Overview",
+    //   url: "/dashboard/overview",
+    //   icon: Home,
+    // },
     {
       title: "Teams",
       url: "/dashboard/teams",
