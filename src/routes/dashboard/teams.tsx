@@ -41,7 +41,7 @@ function RouteComponent() {
                           <div className='w-4/5 flex flex-col justify-center items-start gap-2'>
                           <img src={team.logo} alt={team.name} className="w-20 h-20" />
                           <h2 className="text-lg font-clash-medium">{team.name}</h2>
-                          {/* <Button className="bg-orange-300 font-Poppins font-normal text-gray-800 text-xs px-3 py-2 rounded-md hover:cursor-pointer hover:font-satohsi-bold hover:bg-orange-500 hover:text-white">View Team Stats</Button> */}
+                          <Button className="bg-orange-300 font-Poppins font-normal text-gray-800 text-xs px-3 py-2 rounded-md hover:cursor-pointer hover:font-satohsi-bold hover:bg-orange-500 hover:text-white">View Team Stats</Button>
                             </div>
                          <div className="w-1/5 h-full flex justify-start items-start">
                          <div className="flex justify-center items-center gap-2  bg-green-300  px-4 py-2 rounded-md">
