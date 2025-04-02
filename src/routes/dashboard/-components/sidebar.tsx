@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
-import { Calendar ,Club , Home} from 'lucide-react'
+import { Calendar ,Club , } from 'lucide-react'
 import { Link } from '@tanstack/react-router';
 
 export const AppSidebar = () => {
