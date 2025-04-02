@@ -7,6 +7,7 @@ import { fetchGames } from '@/api/gamesRequest'
 import { MapPin, Clock8 ,CalendarDays,ChevronUp,ChevronDown} from 'lucide-react'
 import { Carousel, CarouselContent, CarouselItem,CarouselNext,
   CarouselPrevious } from '@/components/ui/carousel'
+import { Table, TableRow, TableHeader, TableBody, TableHead, TableCell } from '@/components/ui/table'
 
 export const Route = createFileRoute('/dashboard/fixtures')({
   component: Fixtures,
@@ -30,7 +31,13 @@ const { data: gameInfo, isPending, isError } = useQuery({
 });
 
 const [showMatchDetails, setShowMatchDetails] = useState(false);
-const [getGameId, setGameId] = useState<number>()
+const [ gameId, setGameId] = useState<number>()
+function getInitialsCode(teamName:string) {
+  return teamName
+      .split(" ")  // Split by space
+      .map(word => word[0])  // Get the first letter of each word
+      .join("");  // Join them together
+}
   return (
     <LayoutComponent>
       <div className="h-full w-full overflow-auto p-4">
@@ -119,9 +126,9 @@ const [getGameId, setGameId] = useState<number>()
                   </div>
                   </div>
 
-                  <div className=" flex justify-center items-center ">
+                  <div className=" flex justify-center items-center " onClick={()=>setGameId(game.id)}>
                     <span className=' flex justify-center items-center gap-3 font-clash-semibold text-sm text-gray-500 border-2 border-gray-500  px-4 py-2 rounded-md hover:cursor-pointer ' onClick={()=>setShowMatchDetails(!showMatchDetails)}>
-                      {showMatchDetails ? "Hide" : "Show"} {" "}
+                      {showMatchDetails && gameId === game.id ? "Hide" : "Show"} {" "}
                        Score Details
                        {showMatchDetails ? (
                         <ChevronUp/>
@@ -131,13 +138,45 @@ const [getGameId, setGameId] = useState<number>()
                       </span>
                   </div>
               {/* Add more game details as needed */}
-              {showMatchDetails && (
-             <div className='flex flex-col justify-center items-center gap-2 border-b'>
-              <div className=" ">
+              {
 
+              }
+              {showMatchDetails &&gameId === game.id ? (
+             <div className='flex flex-col justify-center items-center gap-2 border-b'>
+             <Table>
+             <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px] font-satoshi-bold">Teams</TableHead>
+          <TableHead className=" font-satoshi-bold">Q1</TableHead>
+          <TableHead className=" font-satoshi-bold">Q2</TableHead>
+          <TableHead className=" font-satoshi-bold">Q3</TableHead>
+          <TableHead className=" font-satoshi-bold">Q4</TableHead>
+          <TableHead className=" font-satoshi-bold">OT</TableHead>
+
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+          <TableRow key={game.id}>
+            <TableCell className="font-medium font-satoshi-medium">{getInitialsCode(game.teams.home.name)}</TableCell>
+            <TableCell className='font-satoshi-medium'>{game.scores.home.quarter_1}</TableCell>
+            <TableCell className='font-satoshi-medium'>{game.scores.home.quarter_2}</TableCell>
+            <TableCell className="font-satoshi-medium">{game.scores.home.quarter_3}</TableCell>
+            <TableCell className="font-satoshi-medium">{game.scores.home.quarter_4}</TableCell>
+            <TableCell className="font-satoshi-medium">{game.scores.home.over_time}</TableCell>
+          </TableRow>
+          <TableRow key={game.id}>
+            <TableCell className="font-satoshi-medium">{getInitialsCode(game.teams.away.name)}</TableCell>
+            <TableCell className='font-satoshi-medium'>{game.scores.away.quarter_1}</TableCell>
+            <TableCell className='font-satoshi-medium'>{game.scores.away.quarter_2}</TableCell>
+            <TableCell className="font-satoshi-medium">{game.scores.away.quarter_3}</TableCell>
+            <TableCell className="font-satoshi-medium">{game.scores.away.quarter_4}</TableCell>
+            <TableCell className="font-satoshi-medium">{game.scores.away.over_time}</TableCell>
+          </TableRow>
+      
+      </TableBody>
+             </Table>
               </div>
-              </div>
-            )}
+            ): null}
             </div>
 
           
