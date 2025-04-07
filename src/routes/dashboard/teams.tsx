@@ -3,13 +3,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import LayoutComponent from './_layout'
 // import {useQuery} from "@tanstack/react-query"
 // import { fetchAllTeams } from '@/api/teamsRequest'
-// import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {Loader2 } from "lucide-react"
-// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
-// import { useState } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
+import { useState } from 'react'
 // import { fetchTeamStatsById } from '@/api/teamsRequest'
 import { useQuery } from '@apollo/client'
-import { GET_ALL_TEAMS } from '@/api/teamsRequest'
+import { GET_ALL_TEAMS,GET_TEAM_STATS } from '@/api/teamsRequest'
 
 
 export const Route = createFileRoute('/dashboard/teams')({
@@ -21,12 +21,20 @@ function RouteComponent() {
   //   queryKey: ["teams"],
   //   queryFn: fetchAllTeams
   // });
+  const [teamId, setTeamId] = useState<string>();
 
  const  {loading: teamsLoading, error: teamsError, data} = useQuery(GET_ALL_TEAMS)
 
+const  {loading: statsLoading, error:statsError, data:Stats} = useQuery(GET_TEAM_STATS,{
+  variables:{
+    teamId: teamId
+  },
+ skip: !teamId,
+})
+  
+const TeamStats = Stats?.teamStats || [];
 
-  // const [teamId, setTeamId] = useState<number | string>();
-
+console.log(TeamStats?.teamStats)
   // const {isPending: statsLoading, isError: statsError, data:TeamStats, refetch:fetchStats} = useQuery({
   //         queryKey: ["teamStats", teamId],
   //         queryFn: () => fetchTeamStatsById(teamId as number),
@@ -66,10 +74,10 @@ function RouteComponent() {
                           <div className='w-4/5 flex flex-col justify-center items-start gap-2'>
                           <img src={team.logo} alt={team.name} className="w-20 h-20 object-contain" />
                           <h2 className="text-lg font-clash-medium">{team.name}</h2>
-                          {/* <Dialog>
+                          <Dialog>
                             <DialogTrigger asChild>
                             <Button className="bg-orange-300 font-Poppins font-normal text-gray-800 text-xs px-3 py-2 rounded-md hover:cursor-pointer hover:font-satohsi-bold hover:bg-orange-500 hover:text-white"
-                           onClick={()=>fetchStats()}
+                           onClick={()=> setTeamId(team.id)}
                            >View Team Stats</Button>
                             </DialogTrigger>
                             <DialogContent>
@@ -80,7 +88,7 @@ function RouteComponent() {
              ${team.name}`}
           </DialogDescription>
                               </DialogHeader>
-                              {loading ? (
+                              {statsLoading ? (
                                 <div>
                                   <span className="flex justify-center items-center">
                                     <Loader2
@@ -88,7 +96,7 @@ function RouteComponent() {
                                     className='animate-spin text-orange-500 '/>
                                   </span>
                                 </div>
-                              ): error ? (
+                              ): statsError? (
                                 <p className='flex justify-center items-center font-satoshi-medium text-red-400'>{`There was error loading stats for ${team.name}` } </p>
                               ): !TeamStats || TeamStats.length === 0 ? (
                                 <p className="flex justify-center items-center">No stats available.</p>
@@ -195,7 +203,7 @@ function RouteComponent() {
                                </div>
                               )}
                             </DialogContent>
-                          </Dialog> */}
+                          </Dialog>
                             </div>
                          <div className="w-1/5 h-full flex justify-start items-start">
                          <div className="flex justify-center items-center gap-2  bg-green-300  px-4 py-2 rounded-md">

@@ -24,16 +24,12 @@ const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <AuthProvider> 
    <ApolloProvider client={client}>
     <QueryClientProvider client={queryClient}>
-    <AuthProvider> 
-    
       <RouterProvider router={router}/>
-      
-    </AuthProvider>
-    
     </QueryClientProvider>
     </ApolloProvider>
-    
+    </AuthProvider>
   </StrictMode>,
 )

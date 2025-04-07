@@ -44,8 +44,57 @@ export const GET_ALL_TEAMS = gql`
     }
 `;
 
-// export const GET_TEAM_STATS = gql`
-// query GetTeamStats {
-
-// }
-// `
+export const GET_TEAM_STATS = gql`
+query TeamStats($teamId: ID!) {
+  teamStats(teamId: $teamId) {
+    games {
+      played {
+        all
+        away
+        home
+      }
+      loses {
+        all {
+          total
+        }
+        away {
+          total
+        }
+        home {
+          total
+        }
+      }
+      wins {
+        all {
+          total
+        }
+        away {
+          total
+        }
+        home {
+          total
+        }
+      }
+    }
+    points {
+      against {
+        average {
+          all
+          away
+          home
+        }
+      }
+      for {
+        average {
+          all
+          away
+          home
+        }
+      }
+    }
+    team {
+      name
+    }
+  }
+}
+`
