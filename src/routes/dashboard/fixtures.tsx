@@ -1,42 +1,48 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
 import { useState } from "react"
 import LayoutComponent from './_layout'
-import { fetchAllTeams } from '@/api/teamsRequest'
-import { fetchGames } from '@/api/gamesRequest'
 import { MapPin, Clock8 ,CalendarDays,ChevronUp,ChevronDown} from 'lucide-react'
 import { Carousel, CarouselContent, CarouselItem,CarouselNext,
   CarouselPrevious } from '@/components/ui/carousel'
 import { Table, TableRow, TableHeader, TableBody, TableHead, TableCell } from '@/components/ui/table'
+import { GET_GAMES } from '@/api/gamesRequest'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_TEAMS } from '@/api/teamsRequest'
 
 export const Route = createFileRoute('/dashboard/fixtures')({
   component: Fixtures,
 })
 
 function Fixtures() {
-  // Fetch the teams for the tabs
-  const { data: teamData } = useQuery({
-    queryKey: ["teams"],
-    queryFn: fetchAllTeams
-  });
+const { data: teamsData, loading: teamsLoading, error: teamsError } = useQuery(GET_ALL_TEAMS);
+const [selectedTeamId, setSelectedTeamId] = useState<string>("132"); 
+const [showMatchDetails, setShowMatchDetails] = useState(false);
+const [gameId, setGameId] = useState<number>();
 
-  const [selectedTeamId, setSelectedTeamId] = useState<number | string>(132);
-
-  // Fetch the games data for the selected team
-const { data: gameInfo, isPending, isError } = useQuery({
-  queryKey: ["games", selectedTeamId],
-  queryFn: () => fetchGames(selectedTeamId),
-  // Only run the query when a team is selected
-  enabled: selectedTeamId !== 0
+// Use `skip` to conditionally fetch
+const { loading: gamesLoading, error: gamesError, data: gamesData } = useQuery(GET_GAMES, {
+  variables: {
+    teamId: selectedTeamId,
+    leagueId: "12",
+    season: "2023-2024",
+  },
+  skip: !selectedTeamId, 
 });
 
-const [showMatchDetails, setShowMatchDetails] = useState(false);
-const [ gameId, setGameId] = useState<number>()
+
+if (teamsLoading) return <div></div>;
+if (teamsError) return <div></div>;
+
+const teams = teamsData?.teams || [];
+const fixtures = gamesData?.fixtures || [];
+
+
+
 function getInitialsCode(teamName:string) {
   return teamName
-      .split(" ")  // Split by space
-      .map(word => word[0])  // Get the first letter of each word
-      .join("");  // Join them together
+      .split(" ")  
+      .map(word => word[0])  
+      .join("");  
 }
   return (
     <LayoutComponent>
@@ -47,7 +53,7 @@ function getInitialsCode(teamName:string) {
 <div className='min-h-screen flex flex-col gap-28'>
         <Carousel className="relative flex w-full overflow-hidden  gap-4 snap-x px-10">
           <CarouselContent className='pl-5 space-x-5'>
-          {teamData?.map((team: any) => (
+          {teams?.map((team: any) => (
             <CarouselItem
               key={team.id}
               className={`
@@ -73,12 +79,12 @@ function getInitialsCode(teamName:string) {
        
 
         {/* Loading and error states */}
-        {isPending && <p>Loading games...</p>}
-        {isError && <p>Error loading games</p>}
+        {gamesLoading && <p>Loading games...</p>}
+        {gamesError && <p>Error loading games</p>}
 
         {/* Games display */}
         <div className="grid grid-cols-1  gap-6 ">
-          {gameInfo?.map((game: any) => (
+          {fixtures?.map((game: any) => (
             <div key={game.id} className="flex flex-col border border-orange-200 rounded-lg p-3 mb-2 gap-5 hover:bg-orange-100">
              <div className="flex justify-between item-start">
               <div className='flex justify-center items-center gap-2'>

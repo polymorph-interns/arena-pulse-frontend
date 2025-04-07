@@ -1,14 +1,15 @@
+import { gql } from "@apollo/client";
 export const BASE_API_URL = "https://arena-pulse-backend.onrender.com/v1/teams"
 
-export const fetchAllTeams= async()=>
-{
-  const teams= await fetch(`${BASE_API_URL}/`,
-    {
-      method:"GET"
-    }
-  )
-  return teams.json();
-}
+// export const fetchAllTeams= async()=>
+// {
+//   const teams= await fetch(`${BASE_API_URL}/`,
+//     {
+//       method:"GET"
+//     }
+//   )
+//   return teams.json();
+// }
 
 export const fetchTeamById= async(id:number)=>
 {
@@ -26,3 +27,25 @@ export const fetchTeamStatsById =async(id:number)=>
   console.log(teamStatsData)
   return teamStatsData;
 }
+
+
+//GrqphQL Queries
+export const GET_ALL_TEAMS = gql`
+    query GetAllTeams {
+      teams {
+      id
+      logo
+      name
+      country {
+      flag
+      name
+    }
+  }
+    }
+`;
+
+// export const GET_TEAM_STATS = gql`
+// query GetTeamStats {
+
+// }
+// `

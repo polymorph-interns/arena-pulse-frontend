@@ -1,38 +1,43 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import LayoutComponent from './_layout'
-import {useQuery} from "@tanstack/react-query"
-import { fetchAllTeams } from '@/api/teamsRequest'
-import { Button } from '@/components/ui/button'
+// import {useQuery} from "@tanstack/react-query"
+// import { fetchAllTeams } from '@/api/teamsRequest'
+// import { Button } from '@/components/ui/button'
 import {Loader2 } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
-import { useState } from 'react'
-import { fetchTeamStatsById } from '@/api/teamsRequest'
+// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
+// import { useState } from 'react'
+// import { fetchTeamStatsById } from '@/api/teamsRequest'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_TEAMS } from '@/api/teamsRequest'
+
 
 export const Route = createFileRoute('/dashboard/teams')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { isPending, isError, data } = useQuery({
-    queryKey: ["teams"],
-    queryFn: fetchAllTeams
-  });
+  // const { isPending, isError, data } = useQuery({
+  //   queryKey: ["teams"],
+  //   queryFn: fetchAllTeams
+  // });
+
+ const  {loading: teamsLoading, error: teamsError, data} = useQuery(GET_ALL_TEAMS)
 
 
-  const [teamId, setTeamId] = useState<number | string>();
+  // const [teamId, setTeamId] = useState<number | string>();
 
-  const {isPending:loading, isError:error, data:TeamStats, refetch:fetchStats} = useQuery({
-          queryKey: ["teamStats", teamId],
-          queryFn: () => fetchTeamStatsById(teamId as number),
-          enabled: false
-  })
+  // const {isPending: statsLoading, isError: statsError, data:TeamStats, refetch:fetchStats} = useQuery({
+  //         queryKey: ["teamStats", teamId],
+  //         queryFn: () => fetchTeamStatsById(teamId as number),
+  //         enabled: false
+  // })
 
-  useEffect(() => {
-    if (teamId !== null) {
-      fetchStats();
-    }
-  }, [teamId]);
+  // useEffect(() => {
+  //   if (teamId !== null) {
+  //     fetchStats();
+  //   }
+  // }, [teamId]);
     return (
       <LayoutComponent>
         <div className="h-full w-full overflow-auto">
@@ -40,7 +45,7 @@ function RouteComponent() {
             Teams{" "}<span className='text-orange-300'>&gt;</span>{" "}National Basketball Association
           </h1>
          {
-          isPending? (
+          teamsLoading? (
             <div className="h-screen flex justify-center items-center ">
             <span className="flex justify-center items-center">
                <Loader2
@@ -48,18 +53,20 @@ function RouteComponent() {
                 className='animate-spin text-orange-500 '/>
             </span>
             </div>
-          ): isError ? (
+          ): teamsError ? (
             <p className='flex justify-center items-center'>
             Error loading data
           </p>
           ):  (
           <div className='w-full grid grid-cols-1 md:grid-cols-3 place-items-even gap-5 overflow-visible'>
-                      {data?.map((team: any) => (
-                        <div key={team.id} className="flex justify-between items-center p-4 w-84 h-48 border border-gray-200 rounded-md shadow-md mb-4" onClick={()=> setTeamId(team.id)}>
+                      {data.teams?.map((team: any) => (
+                        <div key={team.id} className="flex justify-between items-center p-4 w-84 h-48 border border-gray-200 rounded-md shadow-md mb-4"
+                        //  onClick={()=> setTeamId(team.id)}
+                         >
                           <div className='w-4/5 flex flex-col justify-center items-start gap-2'>
                           <img src={team.logo} alt={team.name} className="w-20 h-20 object-contain" />
                           <h2 className="text-lg font-clash-medium">{team.name}</h2>
-                          <Dialog>
+                          {/* <Dialog>
                             <DialogTrigger asChild>
                             <Button className="bg-orange-300 font-Poppins font-normal text-gray-800 text-xs px-3 py-2 rounded-md hover:cursor-pointer hover:font-satohsi-bold hover:bg-orange-500 hover:text-white"
                            onClick={()=>fetchStats()}
@@ -188,7 +195,7 @@ function RouteComponent() {
                                </div>
                               )}
                             </DialogContent>
-                          </Dialog>
+                          </Dialog> */}
                             </div>
                          <div className="w-1/5 h-full flex justify-start items-start">
                          <div className="flex justify-center items-center gap-2  bg-green-300  px-4 py-2 rounded-md">
