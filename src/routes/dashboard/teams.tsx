@@ -21,20 +21,20 @@ function RouteComponent() {
   //   queryKey: ["teams"],
   //   queryFn: fetchAllTeams
   // });
-  const [teamId, setTeamId] = useState<string>();
+  const [selectedTeamId, setTeamId] = useState<string>();
 
  const  {loading: teamsLoading, error: teamsError, data} = useQuery(GET_ALL_TEAMS)
 
-const  {loading: statsLoading, error:statsError, data:Stats} = useQuery(GET_TEAM_STATS,{
+const  {loading: statsLoading, error:statsError, data:TeamStatsData} = useQuery(GET_TEAM_STATS,{
   variables:{
-    teamId: teamId
+    teamId: selectedTeamId,
   },
- skip: !teamId,
+ skip: !selectedTeamId,
 })
   
-const TeamStats = Stats?.teamStats || [];
+const TeamStats = TeamStatsData?.teamStats || undefined;;
 
-console.log(TeamStats?.teamStats)
+// console.log(TeamStats)
   // const {isPending: statsLoading, isError: statsError, data:TeamStats, refetch:fetchStats} = useQuery({
   //         queryKey: ["teamStats", teamId],
   //         queryFn: () => fetchTeamStatsById(teamId as number),
@@ -69,7 +69,7 @@ console.log(TeamStats?.teamStats)
           <div className='w-full grid grid-cols-1 md:grid-cols-3 place-items-even gap-5 overflow-visible'>
                       {data.teams?.map((team: any) => (
                         <div key={team.id} className="flex justify-between items-center p-4 w-84 h-48 border border-gray-200 rounded-md shadow-md mb-4"
-                        //  onClick={()=> setTeamId(team.id)}
+                         onClick={()=> setTeamId(String(team.id))}
                          >
                           <div className='w-4/5 flex flex-col justify-center items-start gap-2'>
                           <img src={team.logo} alt={team.name} className="w-20 h-20 object-contain" />
@@ -77,7 +77,7 @@ console.log(TeamStats?.teamStats)
                           <Dialog>
                             <DialogTrigger asChild>
                             <Button className="bg-orange-300 font-Poppins font-normal text-gray-800 text-xs px-3 py-2 rounded-md hover:cursor-pointer hover:font-satohsi-bold hover:bg-orange-500 hover:text-white"
-                           onClick={()=> setTeamId(team.id)}
+                          //  onClick={()=> setTeamId(team.id)}
                            >View Team Stats</Button>
                             </DialogTrigger>
                             <DialogContent>
@@ -101,7 +101,7 @@ console.log(TeamStats?.teamStats)
                               ): !TeamStats || TeamStats.length === 0 ? (
                                 <p className="flex justify-center items-center">No stats available.</p>
                               )  : (
-                               <div key={TeamStats.stats.id} className="flex flex-col justify-center items-start ">
+                               <div key={TeamStats?.team.name} className="flex flex-col justify-center items-start ">
                                 <div className='flex flex-col justify-start items-start gap-2'>
                                   <h3 className='font-clash-semibold text-[16px]'>Games</h3>
                                   <div className='grid grid-cols-1 md:grid-cols-2 place-items-center gap-10 w-full'>
@@ -110,15 +110,15 @@ console.log(TeamStats?.teamStats)
                                     <div className='grid grid-cols-3 place-items-center gap-10 w-full'>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Home</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.played.home}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.played?.home}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Away</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.played.away}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.played?.away}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>All</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.played.all}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.played?.all}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -127,15 +127,15 @@ console.log(TeamStats?.teamStats)
                                     <div className='grid grid-cols-3 place-items-center gap-10 w-full'>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Home</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.wins.home.total}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.wins?.home?.total}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Away</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.wins.away.total}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.stats?.games?.wins?.away?.total}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>All</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.wins.all.total}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.wins?.all?.total}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -144,15 +144,15 @@ console.log(TeamStats?.teamStats)
                                     <div className='grid grid-cols-3 place-items-center gap-10 w-full'>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Home</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.loses.home.total}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.loses?.home?.total}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Away</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.loses.away.total}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.loses?.away?.total}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>All</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.games.loses.all.total}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.games?.loses?.all?.total}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -169,15 +169,15 @@ console.log(TeamStats?.teamStats)
                                     <div className='grid grid-cols-3 place-items-center gap-10 w-full'>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Home</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.points.against.average.home}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.points?.against?.average?.home}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Away</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.points.against.average.away}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.points?.against?.average?.away}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>All</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.points.against.average.all}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.points?.against?.average?.all}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -186,15 +186,15 @@ console.log(TeamStats?.teamStats)
                                     <div className='grid grid-cols-3 place-items-center gap-10 w-full'>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Home</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.points.against.average.home}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.points?.against?.average?.home}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>Away</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.points.against.average.away}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.points?.against?.average?.away}</span>
                                       </div>
                                       <div className='flex flex-col justify-start items-start gap-2'>
                                         <p className='font-Poppins text-gray-500 text-sm'>All</p>
-                                        <span className='font-clash-semibold'>{TeamStats.stats.points.against.average.all}</span>
+                                        <span className='font-clash-semibold'>{TeamStats?.stats?.points?.against?.average?.all}</span>
                                       </div>
                                     </div>
                                   </div>
